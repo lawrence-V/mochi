@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Mochi</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #ffeef8, #f0f8ff, #fff5ee);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Comic Sans MS", cursive, sans-serif;
+        overflow: hidden;
+      }
+
+      .mochi-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        perspective: 1000px;
+      }
+
+      .mochi {
+        position: relative;
+        width: 200px;
+        height: 180px;
+        background: radial-gradient(
+          ellipse at 30% 30%,
+          #ffffff,
+          #ffe0f0,
+          #ffb3d9,
+          #ff8cc8
+        );
+        border-radius: 50% 50% 45% 55% / 60% 65% 35% 40%;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        box-shadow: 0 20px 40px rgba(255, 140, 200, 0.3),
+          inset 0 5px 15px rgba(255, 255, 255, 0.4),
+          inset 0 -5px 15px rgba(255, 140, 200, 0.2);
+        animation: breathe 4s ease-in-out infinite;
+      }
+
+      .mochi:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow: 0 30px 60px rgba(255, 140, 200, 0.4),
+          inset 0 8px 20px rgba(255, 255, 255, 0.5),
+          inset 0 -8px 20px rgba(255, 140, 200, 0.3);
+      }
+
+      .mochi.squish {
+        animation: mochiSquish 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      }
+
+      .mochi.happy {
+        animation: happyBounce 1.2s ease-in-out;
+      }
+
+      @keyframes breathe {
+        0%,
+        100% {
+          transform: scale(1) rotate(0deg);
+          border-radius: 50% 50% 45% 55% / 60% 65% 35% 40%;
+        }
+        50% {
+          transform: scale(1.02) rotate(1deg);
+          border-radius: 45% 55% 50% 50% / 65% 60% 40% 35%;
+        }
+      }
+
+      @keyframes mochiSquish {
+        0% {
+          transform: scale(1);
+          border-radius: 50% 50% 45% 55% / 60% 65% 35% 40%;
+        }
+        20% {
+          transform: scale(0.85, 1.3);
+          border-radius: 60% 40% 55% 45% / 40% 75% 25% 60%;
+        }
+        40% {
+          transform: scale(1.2, 0.7);
+          border-radius: 30% 70% 35% 65% / 80% 45% 55% 20%;
+        }
+        60% {
+          transform: scale(0.95, 1.1);
+          border-radius: 55% 45% 50% 50% / 50% 70% 30% 50%;
+        }
+        80% {
+          transform: scale(1.05, 0.95);
+          border-radius: 45% 55% 48% 52% / 65% 55% 45% 35%;
+        }
+        100% {
+          transform: scale(1);
+          border-radius: 50% 50% 45% 55% / 60% 65% 35% 40%;
+        }
+      }
+
+      @keyframes happyBounce {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateY(0) scale(1) rotate(0deg);
+        }
+        10% {
+          transform: translateY(-20px) scale(1.1) rotate(-5deg);
+        }
+        30% {
+          transform: translateY(-15px) scale(1.05) rotate(3deg);
+        }
+        40% {
+          transform: translateY(-25px) scale(1.08) rotate(-2deg);
+        }
+        60% {
+          transform: translateY(-10px) scale(1.03) rotate(1deg);
+        }
+        70% {
+          transform: translateY(-15px) scale(1.06) rotate(-1deg);
+        }
+      }
+
+      .face {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: all 0.3s ease;
+      }
+
+      .eyes {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 15px;
+        justify-content: center;
+      }
+
+      .eye {
+        width: 20px;
+        height: 20px;
+        background: #333;
+        border-radius: 50%;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .eye.blink {
+        height: 3px;
+        border-radius: 10px;
+      }
+
+      .eye.happy {
+        transform: rotate(45deg) scaleY(0.5);
+        border-radius: 50% 0;
+      }
+
+      .eye::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 6px;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .mouth {
+        width: 40px;
+        height: 20px;
+        border: 3px solid #333;
+        border-top: none;
+        border-radius: 0 0 40px 40px;
+        margin: 0 auto;
+        transition: all 0.3s ease;
+      }
+
+      .mouth.happy {
+        width: 50px;
+        height: 25px;
+        border-radius: 0 0 50px 50px;
+      }
+
+      .cheeks {
+        position: absolute;
+        top: 60px;
+        width: 25px;
+        height: 20px;
+        background: rgba(255, 182, 193, 0.6);
+        border-radius: 50%;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .cheek-left {
+        left: 30px;
+      }
+
+      .cheek-right {
+        right: 30px;
+      }
+
+      .mochi:hover .cheeks {
+        opacity: 1;
+      }
+
+      .sparkles {
+        position: absolute;
+        pointer-events: none;
+      }
+
+      .sparkle {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #ffeb3b;
+        border-radius: 50%;
+        animation: sparkleFloat 2s ease-out forwards;
+      }
+
+      @keyframes sparkleFloat {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100px) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .interaction-text {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        color: #666;
+        font-size: 18px;
+        pointer-events: none;
+        opacity: 0.7;
+        animation: textPulse 3s ease-in-out infinite;
+      }
+
+      @keyframes textPulse {
+        0%,
+        100% {
+          opacity: 0.7;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .love-hearts {
+        position: absolute;
+        pointer-events: none;
+      }
+
+      .heart {
+        position: absolute;
+        color: #ff69b4;
+        font-size: 20px;
+        animation: heartFloat 3s ease-out forwards;
+      }
+
+      @keyframes heartFloat {
+        0% {
+          transform: translateY(0) rotate(0deg) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-150px) rotate(360deg) scale(0);
+          opacity: 0;
+        }
+      }
+
+      .squish-counter {
+        position: absolute;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        font-size: 16px;
+        font-weight: bold;
+        color: #666;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="squish-counter">
+      🍡 Squishes: <span id="squishCount">0</span><br />
+      <small id="moodText">Ready to be squished!</small>
+    </div>
+
+    <div class="mochi-container">
+      <div class="mochi" id="mochi">
+        <div class="face">
+          <div class="eyes">
+            <div class="eye" id="leftEye"></div>
+            <div class="eye" id="rightEye"></div>
+          </div>
+          <div class="mouth" id="mouth"></div>
+          <div class="cheeks cheek-left"></div>
+          <div class="cheeks cheek-right"></div>
+        </div>
+      </div>
+      <div class="sparkles" id="sparkles"></div>
+      <div class="love-hearts" id="hearts"></div>
+    </div>
+
+    <div class="interaction-text">Click me to squish! 🥰</div>
+    <div class="interaction-text">Made with ❤️ by Lawrence</div>
+    <script>
+      let squishCount = 0;
+      const mochi = document.getElementById("mochi");
+      const leftEye = document.getElementById("leftEye");
+      const rightEye = document.getElementById("rightEye");
+      const mouth = document.getElementById("mouth");
+      const sparkles = document.getElementById("sparkles");
+      const hearts = document.getElementById("hearts");
+      const squishCounter = document.getElementById("squishCount");
+      const moodText = document.getElementById("moodText");
+
+      const moods = [
+        "Ready to be squished!",
+        "That felt nice! 😊",
+        "Squishy squishy! 🥰",
+        "I'm so bouncy! ✨",
+        "More squishes please! 💕",
+        "This is fun! 🎉",
+        "I love being squishy! 💖",
+        "Bounce bounce! 🌟",
+        "So fluffy! ☁️",
+        "Happiest mochi ever! 🌈",
+      ];
+
+      function createSparkles(x, y) {
+        for (let i = 0; i < 6; i++) {
+          const sparkle = document.createElement("div");
+          sparkle.className = "sparkle";
+          sparkle.style.left = x + (Math.random() - 0.5) * 100 + "px";
+          sparkle.style.top = y + (Math.random() - 0.5) * 100 + "px";
+          sparkle.style.animationDelay = Math.random() * 0.5 + "s";
+          sparkles.appendChild(sparkle);
+
+          setTimeout(() => {
+            sparkle.remove();
+          }, 2000);
+        }
+      }
+
+      function createHearts(x, y) {
+        for (let i = 0; i < 3; i++) {
+          const heart = document.createElement("div");
+          heart.className = "heart";
+          heart.innerHTML = "💖";
+          heart.style.left = x + (Math.random() - 0.5) * 80 + "px";
+          heart.style.top = y + (Math.random() - 0.5) * 60 + "px";
+          heart.style.animationDelay = Math.random() * 0.3 + "s";
+          hearts.appendChild(heart);
+
+          setTimeout(() => {
+            heart.remove();
+          }, 3000);
+        }
+      }
+
+      function updateMood() {
+        const moodIndex = Math.min(squishCount, moods.length - 1);
+        moodText.textContent = moods[moodIndex];
+      }
+
+      function makeHappyFace() {
+        leftEye.classList.add("happy");
+        rightEye.classList.add("happy");
+        mouth.classList.add("happy");
+
+        setTimeout(() => {
+          leftEye.classList.remove("happy");
+          rightEye.classList.remove("happy");
+          mouth.classList.remove("happy");
+        }, 1200);
+      }
+
+      function blink() {
+        leftEye.classList.add("blink");
+        rightEye.classList.add("blink");
+
+        setTimeout(() => {
+          leftEye.classList.remove("blink");
+          rightEye.classList.remove("blink");
+        }, 200);
+      }
+
+      // Random blinking
+      setInterval(() => {
+        if (Math.random() < 0.3) {
+          blink();
+        }
+      }, 3000);
+
+      mochi.addEventListener("click", function (e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Remove existing animations
+        this.classList.remove("squish", "happy");
+
+        // Add squish animation
+        setTimeout(() => {
+          this.classList.add("squish");
+        }, 10);
+
+        // Update counter
+        squishCount++;
+        squishCounter.textContent = squishCount;
+
+        // Play squish sound!
+        playSquishSound();
+
+        // Play flop sound 1 second after every click
+        setTimeout(() => playHappySound(), 1000);
+
+        // Create effects
+        createSparkles(
+          e.clientX - sparkles.getBoundingClientRect().left,
+          e.clientY - sparkles.getBoundingClientRect().top
+        );
+
+        if (squishCount % 3 === 0) {
+          createHearts(
+            e.clientX - hearts.getBoundingClientRect().left,
+            e.clientY - hearts.getBoundingClientRect().top
+          );
+          this.classList.add("happy");
+          makeHappyFace();
+        }
+
+        // Update mood
+        updateMood();
+
+        // Haptic feedback
+        if ("vibrate" in navigator) {
+          navigator.vibrate([50, 30, 50]);
+        }
+
+        // Counter animation
+        squishCounter.style.transform = "translateX(-50%) scale(1.2)";
+        setTimeout(() => {
+          squishCounter.style.transform = "translateX(-50%) scale(1)";
+        }, 200);
+      });
+
+      // Mouse following eyes (subtle)
+      document.addEventListener("mousemove", function (e) {
+        const rect = mochi.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+        const distance = Math.min(
+          3,
+          Math.hypot(e.clientX - centerX, e.clientY - centerY) / 100
+        );
+
+        const eyeX = Math.cos(angle) * distance;
+        const eyeY = Math.sin(angle) * distance;
+
+        leftEye.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
+        rightEye.style.transform = `translate(${eyeX}px, ${eyeY}px)`;
+      });
+
+      // Sound functions using audio files
+      const clickSound = new Audio("two.m4a"); // Sound on initial click
+      const flopSound = new Audio("first.m4a"); // Sound when the mochi flops (happy celebration)
+
+      // Preload audio files to ensure they're ready to play
+      clickSound.preload = "auto";
+      flopSound.preload = "auto";
+
+      // Load the audio files immediately
+      clickSound.load();
+      flopSound.load();
+
+      function playSquishSound() {
+        try {
+          // Reset the audio to the beginning (in case it's still playing)
+          clickSound.currentTime = 0;
+          const playPromise = clickSound.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              console.log("Click sound play failed:", error);
+            });
+          }
+        } catch (e) {
+          console.log("Audio not supported:", e);
+        }
+      }
+
+      function playHappySound() {
+        try {
+          // Reset the audio to the beginning (in case it's still playing)
+          flopSound.currentTime = 0;
+          const playPromise = flopSound.play();
+          if (playPromise !== undefined) {
+            playPromise.catch((error) => {
+              console.log("Flop sound play failed:", error);
+            });
+          }
+        } catch (e) {
+          console.log("Audio not supported:", e);
+        }
+      }
+    </script>
+  </body>
+</html>
