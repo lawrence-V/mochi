@@ -234,17 +234,21 @@
         }
       }
 
-      .interaction-text {
+      .interaction-wrapper {
         position: absolute;
         bottom: 50px;
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
+      }
+
+      .interaction-text {
         color: #666;
         font-size: 18px;
         pointer-events: none;
         opacity: 0.7;
         animation: textPulse 3s ease-in-out infinite;
+        display: block; /* ensures vertical stacking */
       }
 
       @keyframes textPulse {
@@ -301,7 +305,7 @@
       🍡 Squishes: <span id="squishCount">0</span><br />
       <small id="moodText">Ready to be squished!</small>
     </div>
-
+    <!-- dsdsds -->
     <div class="mochi-container">
       <div class="mochi" id="mochi">
         <div class="face">
@@ -318,8 +322,10 @@
       <div class="love-hearts" id="hearts"></div>
     </div>
 
-    <div class="interaction-text">Click me to squish! 🥰</div>
-    <div class="interaction-text">Made with ❤️ by Lawrence</div>
+    <div class="interaction-wrapper">
+      <div class="interaction-text">Click me to squish! 🥰</div>
+      <div class="interaction-text credit">Made with ❤️ by Lawrence</div>
+    </div>
     <script>
       let squishCount = 0;
       const mochi = document.getElementById("mochi");
